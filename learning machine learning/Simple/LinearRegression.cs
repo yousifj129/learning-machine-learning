@@ -38,11 +38,9 @@ namespace learning_machine_learning.Simple
     */
     internal class LinearRegression
     {
-        public static double[] coefficients;
-        public double beta0;
-        public double beta1;
+        public double[] coefficients;
         public LinearRegression(double[] X, double[] Y) {
-            // Number of instances
+            // Number of Inputs/Outputs
             int n = X.Length;
 
             // Augmented matrix
@@ -66,13 +64,19 @@ namespace learning_machine_learning.Simple
             double[,] XTXinvXT =MatrixMath.Multiply(XTXinv, XaugT);
 
             // Matrix multiplication: (X' * X)^-1 * X' * Y
-            double[] coefficients =MatrixMath.Multiply(XTXinvXT, Y);
-            beta0= coefficients[0];
-            beta1= coefficients[1];
+            coefficients =MatrixMath.Multiply(XTXinvXT, Y);
         }
         public double regression(double x)
         {
-            return Math.Round( beta0 + beta1 * x);
+            double result = coefficients[0]; // Intercept term
+
+            for (int i = 1; i < coefficients.Length; i++)
+            {
+                result += coefficients[i] * x;
+                x *= x; // Multiply x by itself for higher-order terms
+            }
+
+            return Math.Round(result);
         }
     }
 }
