@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using learning_machine_learning.Simple;
+using learning_machine_learning.Simple.Chatbot_stuff;
 using ScottPlot;
 using ScottPlot.WinForms;
 
@@ -37,38 +38,4 @@ for(int i = 0;i < a.Length; i++)
 }*/
 // Create some example data
 
-double xt(double t)
-{
-    return Math.Sin( t);
-}
-double yt(double t)
-{
-    return t*t;
-}
-
-int leng = 1000;
-double[] x = new double[leng];
-double[] y = new double[leng];
-
-for (int i = 0; i < leng; i++)
-{
-    x[i] = xt(((double)i) /50);
-    y[i] = yt(((double)i) *1000);
-}
-// Create a new ScottPlot figure
-ScottPlot.Plot plt = new();
-
-plt.Style.ColorGrids(new Color(100, 100, 100));
-plt.Style.ColorAxes(new Color(255,255,255));
-plt.Style.Background(new Color(10, 10, 10), new Color(0, 0, 0));
-// Plot the data as a line plot
-plt.Add.Scatter(x, y);
-
-// Customize the plot
-plt.Title("This Time, We Meet on a Perfect Life");
-plt.XLabel("X");
-plt.YLabel("Y");
-
-// Save the plot to a file
-plt.SavePng("line_plot.png",2000,2000);
-
+ChatbotLevenshtein.sample();

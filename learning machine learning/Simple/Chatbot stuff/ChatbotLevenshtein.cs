@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace learning_machine_learning.Simple.Chatbot_stuff
@@ -35,8 +36,8 @@ namespace learning_machine_learning.Simple.Chatbot_stuff
 
                     if (values.Length >= 2)
                     {
-                        loadedQuestions.Add(values[0]);
-                        loadedAnswers.Add(values[1]);
+                        loadedQuestions.Add(Tokenize(values[0]));
+                        loadedAnswers.Add(Tokenize(values[1]));
                     }
                 }
             }
@@ -44,14 +45,25 @@ namespace learning_machine_learning.Simple.Chatbot_stuff
             questions = loadedQuestions.ToArray();
             answers = loadedAnswers.ToArray();
         }
-        public string generate(string c)
+        public static string Tokenize(string input)
+        {
+            // Remove special characters using regular expression
+            string cleanedString = Regex.Replace(input, @"[!@?""'']", string.Empty);
+
+            // Convert to lowercase and remove leading/trailing whitespaces
+            string tokenizedString = cleanedString.ToLower().Trim();
+
+            return tokenizedString;
+        }
+        public string generate(string question)
         {
             double maxSimilarity = 0;
             int mostSimilarIndex = -1;
+            string inp = Tokenize(question);
 
             for (int i = 0; i < questions.Length; i++)
             {
-                double similarity = StringOperations.LevenshteinSimilarity(c, questions[i]);
+                double similarity = StringOperations.LevenshteinSimilarity(inp, questions[i]);
                 if (similarity > maxSimilarity)
                 {
                     maxSimilarity = similarity;
@@ -61,11 +73,26 @@ namespace learning_machine_learning.Simple.Chatbot_stuff
 
             if (mostSimilarIndex != -1)
             {
-                return answers[mostSimilarIndex];
+                return Tokenize( answers[mostSimilarIndex]);
             }
 
             // If no similar question was found, return a default response
             return "I'm sorry, I don't have an answer to that question.";
+        }
+
+        public static void sample()
+        {
+            ChatbotLevenshtein chatbot = new ChatbotLevenshtein();
+            chatbot.LoadDataFromCSV("Test1.csv");
+
+            while (true)
+            {
+                Console.WriteLine("you: ");
+                string q = Console.ReadLine();
+                Console.WriteLine("The Bot: ");
+                string a = chatbot.generate(q);
+                Console.WriteLine(a);
+            }
         }
     }
 }

@@ -8,6 +8,6 @@ namespace learning_machine_learning.Simple
 {
     interface SimpleChatbot
     {
-        string generate(string c);
+        string generate(string question);
     }
 }
